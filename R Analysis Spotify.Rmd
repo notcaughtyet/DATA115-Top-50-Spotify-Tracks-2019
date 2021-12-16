@@ -1,0 +1,47 @@
+---
+title: "Spotify Spanish vs English Song Comparison"
+author: "Clara"
+date: "12/15/2021"
+output: pdf_document
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("tidyverse")
+
+#Read in the data 
+directory <- "C:/Users/Clara Brigitta/Desktop/WSU Fall 2021/Data 115/Final Project"
+top50 <- file.path(directory,"top50.csv")
+SpotifyDF <- read.csv(top50, header = TRUE)
+view(SpotifyDF)
+
+#Create Data Frames for the Spanish and English Songs
+SpanishSongDF <- subset.data.frame(SpotifyDF, SpotifyDF$Contains.Spanish == "Y")
+view(SpanishSongDF)
+
+EnglishSongDF <- subset.data.frame(SpotifyDF, SpotifyDF$Contains.Spanish == "N")
+view(EnglishSongDF)
+
+```
+
+
+```{R Histograms}
+
+# Histogram of BPM
+# English BPM
+hist(EnglishSongDF$Beats.Per.Minute, main = "English Songs BPM", col = "red", xlab = "BPM")
+# Spanish Song BPM
+hist(SpanishSongDF$Beats.Per.Minute, main = "Spanish Songs BPM", col = "red", xlab = "BPM")
+
+
+# Histogram of Energy
+# English Energy
+hist(EnglishSongDF$Energy, main = "English Songs Energy Distribution", col = "blue", xlab = "Energy")
+# Spanish Energy
+hist(SpanishSongDF$Energy, main = "Spanish Songs Energy Distribution", col = "blue", xlab = "Energy")
+
+```
+
+
