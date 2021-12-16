@@ -1,0 +1,49 @@
+---
+title: "Group Dataset"
+author: "Grace Okamoto"
+date: "12/4/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+I have already checked the data for any required cleaning, and I have de-concatenated keywords into separate sheets. Let's load those sheets in with the original data. We'll also need to load in a variety of packages for future visualizations.
+```{r load}
+ST50 <- read.csv("top50.csv")
+keywords <- read.csv("Lyrics Deconcatenated.csv")
+WC <- read.csv("Wordcloud.csv")
+
+library(ggplot2)
+library(GGally)
+
+library(wordcloud)
+library(RColorBrewer)
+
+library(plotrix)
+```
+Let's summarize some of these tables:
+```{r summary}
+summary(ST50)
+```
+Not a terribly clear way of interpreting data, but it gives a relatively decent idea of the average values we're going to be looking at.
+
+Let's try making a correlation table to see if we can pick out any values that might prove to be usefully correlated to our ranking.
+```{r correlation}
+ggpairs(ST50, columns = c(5:14), title="Spotify Top 50 Correlation")
+cor(ST50[,5:14])
+```
+Although the table is a bit difficult to read, we can see that there aren't very many strong correlations between many of the values listed, making a regression model quite difficult to obtain. Let's take a different approach to our data.
+
+I've used a wordcloud package to visualize some of the most common keywords that appear in the cleaned data, once things such as stop words, filler words, and vulgarities have been censored out.
+```{r wordcloud}
+wordcloud(words = WC$ï..keyword, freq = WC$count, min.freq = 15, random.order=FALSE, rot.per=.5, colors=brewer.pal(8, "Dark2"))
+```
+I've also counted the number of stop words, filler words, vulgarities, and other words and created a pie chart to demonstrate the distribution of these words.
+
+```{r piechart}
+slices <- c(10521, 7930, 928, 175)
+lbls <- c("Stop words (53.8%)", "None (40.6%)", "Filler (4.7%)", "Vulgar(0.9%)")
+pie(slices, labels = lbls, main="Pie Chart of Lyrics")
+```
